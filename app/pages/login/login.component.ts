@@ -9,6 +9,9 @@ import { User } from "../../shared/user/user";
 import { UserService } from "../../shared/user/user.service";
 import { setHintColor } from "../../utils/hint-util";
 
+import app = require("application");
+import platform = require("platform");
+
 @Component({
   selector: "my-app",
   providers: [UserService],
@@ -33,34 +36,34 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    if (!this.user.isValidEmail()) {
-      alert("Enter a valid email address.");
-      return;
-    }
 
-    if (this.isLoggingIn) {
-      this.login();
-    } else {
-      this.signUp();
+    if (app.android) {
+      // native android dialog 
+      var alert = new android.app.AlertDialog.Builder(app.android.foregroundActivity)
+        .setTitle("Native Android Dialog!")
+        .setMessage("I'm a native android dialog triggered from Nativescript!!!")
+        .show();
+
+      console.log("We are running on Android device!");
     }
   }
 
   login() {
     this.userService.login(this.user)
       .subscribe(
-        () => this.router.navigate(["/list"]),
-        (error) => alert("Unfortunately we could not find your account.")
+      () => this.router.navigate(["/list"]),
+      (error) => alert("Unfortunately we could not find your account.")
       );
   }
 
   signUp() {
     this.userService.register(this.user)
       .subscribe(
-        () => {
-          alert("Your account was successfully created.");
-          this.toggleDisplay();
-        },
-        () => alert("Unfortunately we were unable to create your account.")
+      () => {
+        alert("Your account was successfully created.");
+        this.toggleDisplay();
+      },
+      () => alert("Unfortunately we were unable to create your account.")
       );
   }
 
