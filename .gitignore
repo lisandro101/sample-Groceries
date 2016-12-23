@@ -3,7 +3,9 @@ app/**/*.js.map
 hooks/
 lib/
 node_modules/
-platforms/
 tmp/
 typings/
 *.log
+platforms/*
+platforms/android/*
+!platforms/android/build.gradle

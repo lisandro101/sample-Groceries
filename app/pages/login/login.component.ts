@@ -4,6 +4,7 @@ import { Color } from "color";
 import { Page } from "ui/page";
 import { TextField } from "ui/text-field";
 import { View } from "ui/core/view";
+import { Button } from "ui/button";
 
 import { User } from "../../shared/user/user";
 import { UserService } from "../../shared/user/user.service";
@@ -11,6 +12,8 @@ import { setHintColor } from "../../utils/hint-util";
 
 import app = require("application");
 import platform = require("platform");
+
+declare var xyz: any;
 
 @Component({
   selector: "my-app",
@@ -25,6 +28,7 @@ export class LoginComponent implements OnInit {
   @ViewChild("container") container: ElementRef;
   @ViewChild("email") email: ElementRef;
   @ViewChild("password") password: ElementRef;
+  @ViewChild("sign") sign: ElementRef;
 
   constructor(private router: Router, private userService: UserService, private page: Page) {
     this.user = new User();
@@ -35,36 +39,29 @@ export class LoginComponent implements OnInit {
     this.page.backgroundImage = this.page.ios ? "res://bg_login.jpg" : "res://bg_login";
   }
 
-  submit() {
-
+  login() {
     if (app.android) {
+
+      console.log("We are running on Android device!");
+
       // native android dialog 
       var alert = new android.app.AlertDialog.Builder(app.android.foregroundActivity)
         .setTitle("Native Android Dialog!")
         .setMessage("I'm a native android dialog triggered from Nativescript!!!")
         .show();
-
-      console.log("We are running on Android device!");
     }
   }
 
-  login() {
-    this.userService.login(this.user)
-      .subscribe(
-      () => this.router.navigate(["/list"]),
-      (error) => alert("Unfortunately we could not find your account.")
-      );
-  }
+  signUp(args: any) {
+    if (app.android) {
 
-  signUp() {
-    this.userService.register(this.user)
-      .subscribe(
-      () => {
-        alert("Your account was successfully created.");
-        this.toggleDisplay();
-      },
-      () => alert("Unfortunately we were unable to create your account.")
-      );
+      console.log("We are running on Android device!");
+
+      let sign = <Button>this.email.nativeElement;
+
+      var mSmallBang = new xyz.hanks.library.SmallBang.attach2Window(app.android.foregroundActivity);
+      mSmallBang.bang(sign.android);
+    }
   }
 
   toggleDisplay() {
